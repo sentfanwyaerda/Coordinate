@@ -1,24 +1,24 @@
 <?php
-/****************** DO NOT REMOVE OR ALTER THIS HEADER ******************************
-*																					*
-* Product: Coordinate																*
-* A simple PHP class for Coordinates												*
-*																					*
-* Latest version to download: 														*
-* https://github.com/sentfanwyaerda/Coordinate										*
-*																					*
-* Documentation:																	*
-* https://github.com/sentfanwyaerda/Coordinate/blob/master/README.md				*
-*																					*
-* Authors:																			*
-* Sent fan Wy&aelig;rda (fsnode@sent.wyaerda.org) [creator, main]					*
-*																					*
-* License: cc-by-nd																	*
-* Creative Commons, Attribution-No Derivative Works 3.0 Unported					*
-* http://creativecommons.org/licenses/by-nd/3.0/									*
-* http://creativecommons.org/licenses/by-nd/3.0/legalcode							*
-*																					*
-****************** CHANGES IN THE CODE ARE AT OWN RISK *****************************/
+/****************** DO NOT REMOVE OR ALTER THIS HEADER ***************
+*                                                                    *
+* Product: Coordinate                                                *
+* A simple PHP class for Coordinates                                 *
+*                                                                    *
+* Latest version to download:                                        *
+* https://github.com/sentfanwyaerda/Coordinate                       *
+*                                                                    *
+* Documentation:                                                     *
+* https://github.com/sentfanwyaerda/Coordinate/blob/master/README.md *
+*                                                                    *
+* Authors:                                                           *
+* Sent fan Wy&aelig;rda (fsnode@sent.wyaerda.org) [creator, main]    *
+*                                                                    *
+* License: cc-by-nd                                                  *
+* Creative Commons, Attribution-No Derivative Works 3.0 Unported     *
+* http://creativecommons.org/licenses/by-nd/3.0/                     *
+* http://creativecommons.org/licenses/by-nd/3.0/legalcode            *
+*                                                                    *
+****************** CHANGES IN THE CODE ARE AT OWN RISK **************/
 if(!class_exists('Xnode')){
 	class Xnode { }
 }
@@ -79,12 +79,12 @@ class coordinate extends Xnode {
 					case 'MARS':	return ((3396.2 + 3376.2)/2 * 1000); break;
 					case 'MAP':		return NULL; break;
 					default:
-						return (double) preg_replace('#^([^0-9,.]+)?([0-9,.]+)('.implode('|', self::_scales()).')?$#', '\\2', $set[3]);
+						return (double) preg_replace('#^([^0-9,.]+)?([0-9,.-]+)('.implode('|', self::_scales()).')?$#', '\\2', $set[3]);
 				}
 			break;
 			case 'type':
 				$options = array('EARTH','MOON','MARS','SPHERE','MAP');
-				if(preg_match('#^(SPHERE\s)?[0-9,.]+('.implode('|', self::_scales()).')$#i', $set[3])){ return 'SPHERE'; }
+				if(preg_match('#^(SPHERE\s)?[0-9,.-]+('.implode('|', self::_scales()).')$#i', $set[3])){ return 'SPHERE'; }
 				return (in_array(strtoupper($set[3]), $options) ? strtoupper($set[3]) : (FALSE ? 'SPHERE' : 'MAP'));
 				break;
 			case 'scale-z': case 'scale': 
@@ -96,7 +96,7 @@ class coordinate extends Xnode {
 						break;
 					default: /*MAP*/
 				}
-				$blob = preg_replace('#^([A-Z]+\s)?([0-9,.]+)?('.implode('|', self::_scales()).')$#i', '\\3', $set[3]);
+				$blob = preg_replace('#^(SPHERE\s)?([0-9,.-]+)?('.implode('|', self::_scales()).')$#i', '\\3', $set[3]);
 				return /*mm|cm|inch|ft|m|km|miles|EA|lightyears*/ (strlen($blob) > 0 ? strtolower($blob) : NULL);
 				break;
 			case 't': case 'time': return $set[4]; break;
@@ -139,7 +139,7 @@ class coordinate extends Xnode {
 	function is_valid(){ return self::is_well_formed(); }
 	function is_well_formed($string=NULL){ return /*debug*/ TRUE; }
 
-	/*double|degree|FALSE*/ function pythagoras($a=NULL, $b=NULL, $c=NULL, $degree=90, $corner="opposite" /*|alpha|beta|gamma*/ ){
+	public /*double|degree|FALSE*/ function pythagoras($a=NULL, $b=NULL, $c=NULL, $degree=90, $corner="opposite" /*|alpha|beta|gamma*/ ){
 		/*********************************************************************************
 		 * A triangle (sides a, b, c) with the angles:
 		 * alpha is opposite of a
